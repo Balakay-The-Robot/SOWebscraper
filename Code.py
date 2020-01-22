@@ -85,6 +85,15 @@ f.close()
 f = open("OrganizedValues.csv", "a")
 
 for i in sorted:
-  temp = i[0]+", "+str(i[1])
-  print(temp)
+  temp = i[0]+", "+str(i[1])+"\n"
   f.write(temp)
+
+f.close()
+
+try:
+  readOut = int(input("Read Top: "))
+except:
+  readOut = len(sorted)
+
+for i in range(readOut):
+  print(sorted[i][0]+", "+str(sorted[i][1]))
