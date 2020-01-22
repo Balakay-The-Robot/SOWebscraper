@@ -18,6 +18,7 @@ try:
 except:
   wait = 5;
 
+print(max)
 
 pages = []
 
@@ -45,7 +46,7 @@ def check(array):
     return True
   i = 1;
   while i < len(array):
-    if array[i][1] < array[i-1][1] :
+    if array[i][1] > array[i-1][1] :
       return False
     else:
       i += 1
@@ -56,7 +57,7 @@ def partitionAround(array, index):
   part1 = []
   part2 = []
   for i in array:
-    if i[1] < index[1]:
+    if i[1] > index[1]:
       part1.append(i)
     else:
       part2.append(i)
@@ -73,4 +74,17 @@ def sort(unSortedArray):
   tempArrays[0].append(index)
   return tempArrays[0] + tempArrays[1]
 
-sorted = sort(list(organized))
+sorted = []
+
+for i in organized:
+  sorted.append([i, organized[i]])
+sorted = sort(sorted)
+
+f = open("OrganizedValues.csv", "w")
+f.close()
+f = open("OrganizedValues.csv", "a")
+
+for i in sorted:
+  temp = i[0]+", "+str(i[1])
+  print(temp)
+  f.write(temp)
