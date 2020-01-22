@@ -8,8 +8,15 @@ min = 0
 index = min;
 target = "post-tag job-link no-tag-menu"
 
-max = int(BeautifulSoup(urllib.request.urlopen("https://stackoverflow.com/jobs"), 'html.parser').find_all('a', class_="s-pagination--item")[4].contents[1].text)
-print(max)
+try:
+  max = int(input("Max: "))
+except:
+  max = int(BeautifulSoup(urllib.request.urlopen("https://stackoverflow.com/jobs"), 'html.parser').find_all('a', class_="s-pagination--item")[4].contents[1].text)
+
+try:
+  wait = int(input("Courtesy Wait Time: "))
+except:
+  wait = 5;
 
 
 pages = []
@@ -18,7 +25,7 @@ while index <= max:
   temp = url + str(index)
   pages.append(BeautifulSoup(urllib.request.urlopen(temp), 'html.parser').find_all('a', class_=target))
   print(index)
-  time.sleep(5)
+  time.sleep(wait)
 
   index += 1
 
@@ -33,6 +40,37 @@ for i in pages:
     else:
       organized[i0.text] += 1
 
-sorted = []
+def check(array):
+  if len(array) <= 1:
+    return True
+  i = 1;
+  while i < len(array):
+    if array[i][1] < array[i-1][1] :
+      return False
+    else:
+      i += 1
 
-for i in organized:
+  return True
+  
+def partitionAround(array, index):
+  part1 = []
+  part2 = []
+  for i in array:
+    if i[1] < index[1]:
+      part1.append(i)
+    else:
+      part2.append(i)
+  return [part1, part2]
+
+
+def sort(unSortedArray):
+  index = unSortedArray.pop(len(unSortedArray)-1)
+  tempArrays = partitionAround(unSortedArray, index)
+  if not check(tempArrays[0]):
+    tempArrays[0] = sort(tempArrays[0])
+  if not check(tempArrays[1]):
+    tempArrays[1] = sort(tempArrays[1])
+  tempArrays[0].append(index)
+  return tempArrays[0] + tempArrays[1]
+
+sorted = sort(list(organized))
